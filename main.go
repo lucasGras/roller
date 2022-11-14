@@ -2,10 +2,13 @@ package main
 
 import (
     "context"
+    "encoding/json"
     "github.com/caddyserver/caddy/v2"
-    "ops/rollit/docker"
-    proxy "ops/rollit/reverse-proxy"
+    "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+    _ "github.com/caddyserver/caddy/v2/modules/caddyhttp/standard"
     "os"
+    "roller/docker"
+    proxy "roller/reverse-proxy"
 
     "github.com/docker/docker/client"
     "github.com/teris-io/cli"
@@ -59,13 +62,17 @@ func main() {
         },
     )
     pruneCmd := cli.NewCommand("prune", "clean rollit project(s)").
-        WithOption(cli.NewOption("all", "clean all rollit projects").WithChar('a').WithType(cli.TypeBool)).
+        WithArg(cli.NewArg("name", "name the project to delete").AsOptional()).
+        WithOption(cli.NewOption("all", "clean all rollit projects").WithType(cli.TypeBool).WithChar('a')).
         WithAction(func(args []string, options map[string]string) int {
             var mod = docker.PRUNE_MODE_SINGLE
+
             if _, ok := options["all"]; ok {
                 mod = docker.PRUNE_MODE_ALL
+                dockerEngine.Prune(mod, nil)
+                return 0
             }
-            dockerEngine.Prune(mod)
+            dockerEngine.Prune(mod, &args[0])
             return 0
         },
     )
@@ -76,12 +83,25 @@ func main() {
         },
     )
     exposeCmd := cli.NewCommand("expose", "expose rollit project").
+        WithArg(cli.NewArg("name", "name of your rollit project")).
         WithAction(func(args []string, options map[string]string) int {
+            // var name = args[0]
+
             proxy.RunProxy(&caddy.Config{
                 AppsRaw: caddy.ModuleMap{
-                    "http": proxy.ProjectProxyToModuleMap(proxy.ProxyHttpModule{
-                        Servers: []proxy.ProxyHttpModuleServer{
-                            {Listen: []string{":3000"}},
+                    "http": proxy.ProjectProxyToModuleMap(caddyhttp.App{
+                        Servers: map[string]*caddyhttp.Server{
+                            "roger": &caddyhttp.Server{
+                                Listen: []string{":80"},
+                                Routes: []caddyhttp.Route{
+                                    { HandlersRaw: []json.RawMessage{
+                                        []byte(`{
+                                                "handler": "reverse_proxy",
+                                                "upstreams": [{"dial": ":3000"}]
+                                                }`),
+                                    }},
+                                },
+                            },
                         },
                     }),
                 },

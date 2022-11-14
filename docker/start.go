@@ -2,11 +2,11 @@ package docker
 
 import (
     "github.com/docker/docker/api/types"
-    "ops/rollit/roller"
+    "roller/config"
 )
 
 func (engine *DockerEngine) StartContainer(name string) {
-    _, project := roller.GetRollerProject(name)
+    _, project := config.GetRollerProject(name)
     if err := engine.c.ContainerStart(*engine.ctx, project.ContainerId, types.ContainerStartOptions{}); err != nil {
         panic(err)
     }

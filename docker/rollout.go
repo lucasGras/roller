@@ -4,11 +4,11 @@ import (
     "fmt"
     "github.com/docker/docker/api/types"
     "github.com/docker/docker/api/types/container"
-    "ops/rollit/roller"
+    "roller/config"
 )
 
 func (engine *DockerEngine) RolloutContainer(name string) {
-    _, oldProject := roller.GetRollerProject(name)
+    _, oldProject := config.GetRollerProject(name)
 
     // Start new container
     resp, createErr := engine.c.ContainerCreate(*engine.ctx, &container.Config{
@@ -45,7 +45,7 @@ func (engine *DockerEngine) RolloutContainer(name string) {
     fmt.Println("Clean-up containers.")
 
     // Update roller project
-    err := roller.UpdateRollerProject(name, resp.ID, nil)
+    err := config.UpdateRollerProject(name, resp.ID, nil)
     if err != nil {
         panic(err)
     }
