@@ -1,8 +1,17 @@
-# Clean docker volumes, we want to test from clean envs
-docker container rm roller-testenv-debian -fv
+PODNAME='roller-testenv-pod'
+DEBIAN_IMAGE_NAME='roller-testenv-debian'
+DEBIAN_CONTAINER_NAME='rtdebian'
 
-cp ../../scripts/install.sh debian/resources
-cp ../../scripts/uninstall.sh debian/resources
-docker build -t roller-testenv-debian debian
+cp ../../scripts/install.sh debian/
+cp ../../scripts/uninstall.sh debian/
 
-docker run -it --name roller-testenv-debian roller-testenv-debian
+
+podman container rm $DEBIAN_CONTAINER_NAME
+podman pod rm -fi $PODNAME
+
+podman pod create --name $PODNAME
+
+podman build debian --no-cache -t $DEBIAN_IMAGE_NAME
+
+podman run -dt --pod roller-testenv-pod --name $DEBIAN_CONTAINER_NAME roller/debian
+podman attach $DEBIAN_CONTAINER_NAME

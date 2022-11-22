@@ -16,10 +16,10 @@ RUN echo "tuser  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/tuser
 USER tuser
 
 
-COPY install.sh .
-COPY uninstall.sh .
+COPY install.sh $HOME
+COPY uninstall.sh $HOME
 RUN sudo chmod +x install.sh
 RUN sudo chmod +x uninstall.sh
 
-RUN ./install.sh
+# RUN ./install.sh
 # RUN curl https://raw.githubusercontent.com/lucasGras/roller/main/install.sh | sh
