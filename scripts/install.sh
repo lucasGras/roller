@@ -15,13 +15,13 @@ install_caddy() {
     sudo apt update
     sudo apt install caddy
 
-    if [ "$?" = 0 ]; then
+    if [ "$?" != 0 ]; then
         echo "Caddy installation failed."
         exit 1
     fi
 
     caddy version
-    if [ "$?" = 0 ]; then
+    if [ "$?" != 0 ]; then
         echo "Caddy binary not detected."
         exit 1
     fi
@@ -38,30 +38,31 @@ install_caddy() {
 
 install_debian_daemon() {
     # Use the caddy one or my own service ? Want to avoid hard maintaining stuff..
-    wget https://github.com/caddyserver/dist/blob/master/init/caddy-api.service > caddy-api.service
-    if [ "$?" = 0 ]; then
+    curl https://raw.githubusercontent.com/lucasGras/roller/main/daemon/caddy-api.service > caddy-api.service
+    if [ "$?" != 0 ]; then
         echo "Caddy systemd service not reachable."
         exit 1
     fi
+
     sudo mv caddy-api.service /etc/systemd/system/
     sudo systemctl daemon-reload
-    sudo systemctl enable --now caddy
-    systemctl status caddy
-    if [ "$?" = 0 ]; then
+    sudo systemctl enable --now caddy-api
+    systemctl status caddy-api
+    if [ "$?" != 0 ]; then
         echo "Caddy systemd service failed to start."
         exit 1
     fi
 }
 
 install_roller() {
+    rm -rf $HOME/.roller
     mkdir $HOME/.roller && touch $HOME/.roller/rollerFile
-    if [ "$?" = 0 ]; then
+    if [ "$?" != 0 ]; then
         echo "Roller system file installation failed."
         exit 1
     fi
     echo '{"projects": []}' > $HOME/.roller/rollerFile
     # curl from github
-    
 }
 
 if [ "$(uname)" = "Darwin" ]; then

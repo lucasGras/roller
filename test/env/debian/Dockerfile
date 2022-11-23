@@ -5,8 +5,6 @@ LABEL flavor="debian"
 # Install sudo on debian to avoid unknown sudo error
 RUN apt update -y
 RUN apt install sudo -y
-RUN apt update && apt install sudo -y
-RUN apt install curl -y
 
 # Create test user for install scenario
 RUN sudo groupadd test
@@ -15,11 +13,13 @@ RUN usermod -aG sudo tuser
 RUN echo "tuser  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/tuser
 USER tuser
 
+# Requirements for installation
+RUN sudo apt install curl -y
+RUN sudo apt install systemd -y
 
-COPY install.sh $HOME
-COPY uninstall.sh $HOME
-RUN sudo chmod +x install.sh
-RUN sudo chmod +x uninstall.sh
 
+WORKDIR /home/tuser
+
+CMD ["/usr/sbin/init"]
 # RUN ./install.sh
 # RUN curl https://raw.githubusercontent.com/lucasGras/roller/main/install.sh | sh
