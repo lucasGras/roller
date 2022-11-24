@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/lucasgras/roller/badge/main)](https://www.codefactor.io/repository/github/lucasgras/roller/overview/main)
+
 # Roller
 
 > This is a WIP projects, please do not consider using it right now
