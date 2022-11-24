@@ -6,6 +6,7 @@ require (
 	github.com/caddyserver/caddy/v2 v2.6.2
 	github.com/docker/docker v20.10.21+incompatible
 	github.com/docker/go-connections v0.4.0
+	github.com/jedib0t/go-pretty/v6 v6.4.2
 	github.com/teris-io/cli v1.0.1
 )
 
@@ -61,7 +62,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.9.0 // indirect
 	github.com/jackc/pgx/v4 v4.14.0 // indirect
-	github.com/jedib0t/go-pretty/v6 v6.4.2 // indirect
 	github.com/klauspost/compress v1.15.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.1.1 // indirect
 	github.com/libdns/libdns v0.2.1 // indirect
