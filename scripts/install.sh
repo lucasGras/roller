@@ -62,7 +62,7 @@ install_roller() {
         exit 1
     fi
     echo '{"projects": []}' > $HOME/.roller/rollerFile
-    # curl from github
+    # curl from github²
 }
 
 if [ "$(uname)" = "Darwin" ]; then

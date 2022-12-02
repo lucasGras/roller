@@ -1,4 +1,4 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/lucasgras/roller/badge/main)](https://www.codefactor.io/repository/github/lucasgras/roller/overview/main)
+    [![CodeFactor](https://www.codefactor.io/repository/github/lucasgras/roller/badge/main)](https://www.codefactor.io/repository/github/lucasgras/roller/overview/main)
 
 # Roller
 
