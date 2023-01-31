@@ -2,7 +2,7 @@
 
 # Roller
 
-> This is a WIP projects, please do not consider using it right now
+> This is an R&D / experimentational project, please do not consider using it.
 
 Roller is a simple, lightweight and straight-forward docker based project deployment tool.
 
